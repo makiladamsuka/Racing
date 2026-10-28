@@ -12,11 +12,15 @@ size = Vector3(2, 0.5, 4)
 [sub_resource type="BoxShape3D" id="BoxShape3D_3uj75"]
 size = Vector3(2, 0.5, 4)
 
-[node name="Node3D" type="Node3D" unique_id=1858935699]
+[node name="World" type="Node3D" unique_id=1858935699]
 
-[node name="Car" type="RigidBody3D" parent="." unique_id=1256901036]
+[node name="Car" type="RigidBody3D" parent="." unique_id=1256901036 node_paths=PackedStringArray("wheels")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1965451, 0)
 script = ExtResource("1_f3sb7")
+wheels = [NodePath("Wheelfr"), NodePath("Wheelfl"), NodePath("Wheelbl"), NodePath("Wheelbr")]
+spring_strength = 50.0
+spring_damping = 1.0
+rest_dist = 0.0
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Car" unique_id=282201647]
 mesh = SubResource("BoxMesh_3uj75")
@@ -42,3 +46,6 @@ size = Vector3(20, 0.5, 20)
 
 [node name="Camera3D" type="Camera3D" parent="." unique_id=1070874230]
 transform = Transform3D(1, -1.131334e-08, -1.4894255e-09, 1.1313338e-08, 0.9659259, 0.25881907, -1.489429e-09, -0.25881907, 0.9659258, -2, 4, 8)
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1677386364]
+transform = Transform3D(1, 0, 0, 0, 0.6102905, 0.7921777, 0, -0.7921777, 0.6102905, 0, 6.7199783, 6.56667)
