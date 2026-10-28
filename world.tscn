@@ -1,0 +1,44 @@
+[gd_scene format=3 uid="uid://pga2xq7sgy08"]
+
+[ext_resource type="Script" uid="uid://3s6xoqk6gllo" path="res://car.gd" id="1_f3sb7"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gv5m4"]
+albedo_color = Color(0.2904587, 0.71263385, 0.8089106, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_3uj75"]
+material = SubResource("StandardMaterial3D_gv5m4")
+size = Vector3(2, 0.5, 4)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_3uj75"]
+size = Vector3(2, 0.5, 4)
+
+[node name="Node3D" type="Node3D" unique_id=1858935699]
+
+[node name="Car" type="RigidBody3D" parent="." unique_id=1256901036]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1965451, 0)
+script = ExtResource("1_f3sb7")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Car" unique_id=282201647]
+mesh = SubResource("BoxMesh_3uj75")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Car" unique_id=1910434977]
+shape = SubResource("BoxShape3D_3uj75")
+
+[node name="Wheelfr" type="RayCast3D" parent="Car" unique_id=633113053]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0.22556031, 1.4763503)
+
+[node name="Wheelfl" type="RayCast3D" parent="Car" unique_id=997789695]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0.22556031, 1.4763503)
+
+[node name="Wheelbl" type="RayCast3D" parent="Car" unique_id=377414347]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0.22556031, -1.5236497)
+
+[node name="Wheelbr" type="RayCast3D" parent="Car" unique_id=1348435899]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0.22556031, -1.5236497)
+
+[node name="Track" type="CSGBox3D" parent="." unique_id=1394067613]
+use_collision = true
+size = Vector3(20, 0.5, 20)
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=1070874230]
+transform = Transform3D(1, -1.131334e-08, -1.4894255e-09, 1.1313338e-08, 0.9659259, 0.25881907, -1.489429e-09, -0.25881907, 0.9659258, -2, 4, 8)
