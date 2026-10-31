@@ -2,6 +2,9 @@ extends RigidBody3D
 
 @export var wheels: Array[RayCastWheel]
 @export var wheel_acceleration := 10.0
+@export var deccelaration := 2.5
+
+@export var max_speed := 20
 
 var motor_input := 0.0
 
@@ -25,13 +28,24 @@ func _get_point_velocity(point: Vector3) -> Vector3:
 	return linear_velocity + angular_velocity.cross(point - global_position)
 
 func _do_single_wheel_accelaration(ray: RayCastWheel) -> void:
-	if ray.is_colliding() and motor_input:
+	if ray.is_colliding():
 		var forward_dir := -ray.global_transform.basis.z
 		var contact := ray.wheel.global_position
-		var force_vecctor := forward_dir * wheel_acceleration * motor_input
+		var velocity := forward_dir.dot(linear_velocity)
+		
+		ray.wheel.rotate_x(-velocity* get_process_delta_time() * 2 * PI * ray.wheel_radius)
+		
+		var force_vector := forward_dir * wheel_acceleration * motor_input
+		if velocity > max_speed:
+			force_vector * 0.1
 		var force_pos := contact - global_position
+		if motor_input:
+			apply_force(force_vector, force_pos)
+			
+		force_vector = global_basis.z * deccelaration * sign(velocity)
+		apply_force(force_vector, force_pos)
 
-		apply_force(force_vecctor, force_pos)
+
 
 func _do_single_wheel_suspension(ray: RayCastWheel) -> void:
 	ray.target_position.y = -(ray.rest_dist + ray.wheel_radius)
@@ -58,5 +72,6 @@ func _do_single_wheel_suspension(ray: RayCastWheel) -> void:
 		var force_vector := springup_dir * (spring_force - spring_damping_force)
 		var force_pos_offset := contact - global_position
 		apply_force(force_vector, force_pos_offset)
+		
 	else:
 		wheel_visual.position.y = -ray.rest_dist + ray.wheel_radius

@@ -13,13 +13,70 @@ size = Vector3(2, 0.5, 4)
 [sub_resource type="BoxShape3D" id="BoxShape3D_3uj75"]
 size = Vector3(2, 0.5, 4)
 
+[sub_resource type="Gradient" id="Gradient_wheel"]
+offsets = PackedFloat32Array(0, 0.5, 1)
+colors = PackedColorArray(0.005, 0.005, 0.005, 1, 0.035, 0.035, 0.035, 1, 0.12, 0.12, 0.12, 1)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_wheel"]
+frequency = 7.0
+fractal_octaves = 2
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_wheel"]
+width = 256
+height = 256
+noise = SubResource("FastNoiseLite_wheel")
+color_ramp = SubResource("Gradient_wheel")
+seamless = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wheel"]
+albedo_texture = SubResource("NoiseTexture2D_wheel")
+roughness = 0.9
+uv1_scale = Vector3(8, 8, 8)
+uv1_triplanar = true
+texture_filter = 1
+
 [sub_resource type="CylinderMesh" id="CylinderMesh_261b6"]
+material = SubResource("StandardMaterial3D_wheel")
 top_radius = 0.4
 bottom_radius = 0.4
 height = 0.1
 
+[sub_resource type="Gradient" id="Gradient_track"]
+offsets = PackedFloat32Array(0, 0.45, 1)
+colors = PackedColorArray(0.06, 0.07, 0.05, 1, 0.16, 0.14, 0.1, 1, 0.32, 0.27, 0.18, 1)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_track"]
+frequency = 0.08
+fractal_octaves = 3
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_track"]
+noise = SubResource("FastNoiseLite_track")
+color_ramp = SubResource("Gradient_track")
+seamless = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_track"]
+albedo_texture = SubResource("NoiseTexture2D_track")
+roughness = 0.92
+uv1_scale = Vector3(3, 3, 3)
+uv1_triplanar = true
+texture_filter = 1
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_track"]
-size = Vector3(20, 0.5, 20)
+size = Vector3(100, 0.5, 100)
+
+[sub_resource type="BoxMesh" id="BoxMesh_ramp"]
+material = SubResource("StandardMaterial3D_gv5m4")
+size = Vector3(6, 0.5, 8)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ramp"]
+size = Vector3(6, 0.5, 8)
+
+[sub_resource type="BoxMesh" id="BoxMesh_bump"]
+material = SubResource("StandardMaterial3D_gv5m4")
+size = Vector3(6, 0.35, 1.2)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_bump"]
+size = Vector3(6, 0.35, 1.2)
 
 [node name="World" type="Node3D" unique_id=1858935699]
 
@@ -68,15 +125,43 @@ transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, 0, 0
 mesh = SubResource("CylinderMesh_261b6")
 
 [node name="Track" type="CSGBox3D" parent="." unique_id=1394067613]
-size = Vector3(20, 0.5, 20)
+size = Vector3(100, 0.5, 100)
+material = SubResource("StandardMaterial3D_track")
 
 [node name="TrackBody" type="StaticBody3D" parent="." unique_id=1264049340]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="TrackBody" unique_id=1492501924]
 shape = SubResource("BoxShape3D_track")
 
-[node name="Camera3D" type="Camera3D" parent="." unique_id=1070874230]
-transform = Transform3D(1, -1.131334e-08, -1.4894255e-09, 1.1313338e-08, 0.9659259, 0.25881907, -1.489429e-09, -0.25881907, 0.9659258, -2, 4, 8)
+[node name="RampUp" type="StaticBody3D" parent="." unique_id=1770210511]
+transform = Transform3D(1, 0, 0, 0, 0.9781476, 0.2079117, 0, -0.2079117, 0.9781476, 0, 1.08, -14)
+
+[node name="Mesh" type="MeshInstance3D" parent="RampUp" unique_id=1022543541]
+mesh = SubResource("BoxMesh_ramp")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RampUp" unique_id=959403404]
+shape = SubResource("BoxShape3D_ramp")
+
+[node name="RampDown" type="StaticBody3D" parent="." unique_id=1541066123]
+transform = Transform3D(1, 0, 0, 0, 0.9781476, -0.2079117, 0, 0.2079117, 0.9781476, 0, 1.08, -26)
+
+[node name="Mesh" type="MeshInstance3D" parent="RampDown" unique_id=2098372471]
+mesh = SubResource("BoxMesh_ramp")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RampDown" unique_id=1745745332]
+shape = SubResource("BoxShape3D_ramp")
+
+[node name="SpeedBump" type="StaticBody3D" parent="." unique_id=1290192181]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.425, 6)
+
+[node name="Mesh" type="MeshInstance3D" parent="SpeedBump" unique_id=793019392]
+mesh = SubResource("BoxMesh_bump")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="SpeedBump" unique_id=989684197]
+shape = SubResource("BoxShape3D_bump")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1677386364]
 transform = Transform3D(1, 0, 0, 0, 0.6102905, 0.7921777, 0, -0.7921777, 0.6102905, 0, 6.7199783, 6.56667)
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=1070874230]
+transform = Transform3D(0.25881907, 0.48296285, -0.8365163, 1.0542353e-08, 0.86602545, 0.49999994, 0.9659258, -0.12940954, 0.2241439, -7, 5, 1)
