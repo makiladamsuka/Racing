@@ -1,11 +1,9 @@
-extends MeshInstance3D
+extends RayCast3D
 
-
-# Called when the node enters the scene tree for the first time.
-func _ready() -> void:
-	pass # Replace with function body.
-
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
+class_name RayCastWheel
+@export var spring_strength := 100.0
+@export var spring_damping := 3
+@export var rest_dist := 1
+@export var over_extend := 0.0
+@export var wheel_radius = 0.4
+@onready var wheel: Node3D = get_child(0)
