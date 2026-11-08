@@ -5,6 +5,9 @@ extends RigidBody3D
 @export var deccelaration := 2.5
 
 @export var max_speed := 20
+@export var acc_curve : Curve
+
+
 
 var motor_input := 0.0
 
@@ -29,13 +32,16 @@ func _get_point_velocity(point: Vector3) -> Vector3:
 
 func _do_single_wheel_accelaration(ray: RayCastWheel) -> void:
 	if ray.is_colliding():
+		
 		var forward_dir := -ray.global_transform.basis.z
 		var contact := ray.wheel.global_position
 		var velocity := forward_dir.dot(linear_velocity)
 		
+		var speed_ratio = velocity / max_speed
+		var acc := acc_curve.sample_baked(speed_ratio)
 		ray.wheel.rotate_x(-velocity* get_process_delta_time() * 2 * PI * ray.wheel_radius)
 		
-		var force_vector := forward_dir * wheel_acceleration * motor_input
+		var force_vector := forward_dir * wheel_acceleration * motor_input * acc
 		if velocity > max_speed:
 			force_vector * 0.1
 		var force_pos := contact - global_position

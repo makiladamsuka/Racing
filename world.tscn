@@ -3,6 +3,11 @@
 [ext_resource type="Script" uid="uid://3s6xoqk6gllo" path="res://car.gd" id="1_f3sb7"]
 [ext_resource type="Script" uid="uid://buvrwj853f3fc" path="res://RayCast_Wheel.gd" id="2_fj7yv"]
 
+[sub_resource type="Curve" id="Curve_fj7yv"]
+_data = [Vector2(0, 0.4), 0.0, 0.0, 0, 0, Vector2(0.2, 0.90000004), 0.0, 0.0, 0, 0, Vector2(0.5, 0.8), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 4
+metadata/_snap_enabled = true
+
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gv5m4"]
 albedo_color = Color(0.2904587, 0.71263385, 0.8089106, 1)
 
@@ -85,6 +90,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.1965451, 0)
 continuous_cd = true
 script = ExtResource("1_f3sb7")
 wheels = [NodePath("Wheelfr"), NodePath("Wheelfl"), NodePath("Wheelbl"), NodePath("Wheelbr")]
+acc_curve = SubResource("Curve_fj7yv")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Car" unique_id=282201647]
 mesh = SubResource("BoxMesh_3uj75")
